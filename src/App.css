@@ -1,0 +1,58 @@
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;800;900&display=swap);
+
+body {
+  font-family: "Montserrat", sans-serif;
+  background: #15171b;
+  color: white;
+}
+.containerr {
+  max-width: 1240px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+.logo {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 32px;
+}
+.navbar {
+  padding: 20px;
+}
+.nav-btn{
+  color:black;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.overs {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  gap: 20px;
+  scrollbar-width: thin; /* Firefox uchun */
+  scrollbar-color: #000000 transparent; /* Firefox uchun */
+}
+
+.overs > div {
+  flex: 0 0 calc(25% - 15px);
+  scroll-snap-align: start;
+  min-width: 200px;
+}
+
+/* Webkit brauzerlar (Chrome, Safari, Edge) uchun */
+.overs::-webkit-scrollbar {
+  height: 6px;
+  background-color: transparent;
+}
+
+.overs::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 6px;
+}
+
+.overs::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+.coun{
+  font-weight: 700;
+}
