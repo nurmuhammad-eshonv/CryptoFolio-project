@@ -107,7 +107,7 @@ const MarketCup = () => {
                   >
                     <MdRemoveRedEye
                       onClick={() => handleBringData(item)}
-                      className={`cursor-pointer absolute -ml-5 mt-[2px] ${
+                      className={`cursor-pointer absolute -ml-5 mt-[4px] ${
                         isInWatchList ? "text-green-500" : "text-white"
                       }`}
                     />
@@ -136,7 +136,7 @@ const MarketCup = () => {
         </button>
       </div>
       {isModalOpen && modalData.length > 0 && (
-        <div className="absolute top-0 left-[1138px] ">
+        <div className="absolute top-0 left-[969px] ">
           <div className="p-8 rounded-lg w-[550px] bg-gray-500 text-gray-800 flex flex-wrap gap-8 justify-center">
             <h1 className="text-[40px] ml-[66px] text-white">WatchList</h1>
 
