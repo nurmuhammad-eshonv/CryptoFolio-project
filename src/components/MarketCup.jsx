@@ -1,14 +1,15 @@
+
+
 import React, { useState, useEffect } from "react";
-import firstI from "../assets/img/1.png";
-import secI from "../assets/img/2.png";
-import thirdI from "../assets/img/3.png";
-import forthI from "../assets/img/4.png";
+import { MdRemoveRedEye } from "react-icons/md";
 
 const MarketCup = () => {
-    const [search, setSearh] = useState("")
+  const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(10); // Example value; can be adjusted based on API response
+  const [totalPages, setTotalPages] = useState(10);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalData, setModalData] = useState([]);
 
   useEffect(() => {
     fetchData(currentPage);
@@ -35,6 +36,31 @@ const MarketCup = () => {
     }
   };
 
+  const handleBringData = (item) => {  
+    setModalData(prevData => {
+        if (prevData.some(data => data.id === item.id)) {
+            return prevData; 
+        }
+        return [...prevData, item]; 
+    });
+    
+    setIsModalOpen(true);
+};
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  function handleDeleteModal (item){
+        const newDate = modalData.filter((data) => {
+          return data.id!== item.id;
+        })
+        setModalData(newDate);
+        //  const newDeletedData = [...modalData]
+    //   newDeletedData.pop()
+      setModalData(newDeletedData)
+  }
+ 
+
   return (
     <div className="bg-transparent p-4 rounded-lg containerr">
       <h1 className="text-2xl text-center text-white mb-4">
@@ -42,7 +68,7 @@ const MarketCup = () => {
       </h1>
       <div className="flex justify-center mb-4">
         <input
-        onChange={(e) => setSearh(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           type="text"
           placeholder="Search For a Crypto Currency..."
           className="w-full p-2 rounded-md border border-gray-700 bg-gray-800 text-white"
@@ -51,29 +77,47 @@ const MarketCup = () => {
       <table className="w-full table-auto">
         <thead>
           <tr className="bg-blue-400 text-white">
-            <p className="p-2 text-black coun">Coin</p>
+            <th className="p-2 text-black">Coin</th>
             <th className="pl-[140px] text-black">Price</th>
             <th className="p-2 text-black">24h Change</th>
             <th className="p-2 text-black">Market Cap</th>
           </tr>
         </thead>
         <tbody>
-          {data.filter((item) => {
-            return item.symbol.toLowerCase().includes(search.toLowerCase());
-          }).map((item, index) => (
-            <tr key={index} className="text-white border-b border-gray-800">
-              <td className="p-2 flex items-center">
-                <img className="w-[50px] h-[50px]" src={item.image} alt={item.name} />
-                <p className="ml-2 text-2xl m-6 ">{item.symbol.toUpperCase()}</p>
-                <p className="absolute mt-[40px] ml-[60px] text-gray-400 text-[12px]">{item.name}</p>
-              </td>
-              <td className="pl-[290px]">₹{item.current_price}</td>
-              <td className={`pl-20 ${item.price_change_percentage_24h > 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {item.price_change_percentage_24h}%
-              </td>
-              <td className="pl-20">₹{item.market_cap}</td>
-            </tr>
-          ))}
+          {data
+            .filter((item) => {
+              return item.symbol.toLowerCase().includes(search.toLowerCase());
+            })
+            .map((item, index) => (
+              <tr key={index} className="text-white border-b border-gray-800">
+                <td className="p-2 flex items-center">
+                  <img
+                    className="w-[50px] h-[50px]"
+                    src={item.image}
+                    alt={item.name}
+                  />
+                  <p className="ml-2 text-2xl m-6">{item.symbol.toUpperCase()}</p>
+                  <p className="absolute mt-[40px] ml-[60px] text-gray-400 text-[12px]">
+                    {item.name}
+                  </p>
+                </td>
+                <td className="pl-[290px]">₹{item.current_price}</td>
+                <td
+                  className={`pl-20 ${
+                    item.price_change_percentage_24h > 0
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  <MdRemoveRedEye
+                    onClick={() => handleBringData(item)}
+                    className="cursor-pointer absolute -ml-5 mt-[2px]"
+                  />
+                  {item.price_change_percentage_24h}%
+                </td>
+                <td className="pl-20">₹{item.market_cap}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <div className="flex justify-center mt-4">
@@ -92,6 +136,38 @@ const MarketCup = () => {
           Next --&gt;
         </button>
       </div>
+      {isModalOpen && modalData.length > 0 && (
+        <div className="absolute top-0 left-[1138px] ">
+          <div className="p-8 rounded-lg w-[550px] bg-gray-500 text-gray-800 flex flex-wrap gap-8 justify-center">
+          <h1 className="text-[40px] ml-[66px] text-white">WatchList</h1>
+
+            {modalData.map((item, index) => (
+              <div key={index} className="w-[198px] h-[230px] flex flex-col items-center rounded-[25px] justify-center bg-black mb-4">
+                <img className="w-[118px]" src={item.image} alt="" />
+                <h1
+                  className={`pt-3 ${
+                    item.price_change_percentage_24h > 0
+                      ? "text-green-500"
+                      : "text-red-500"
+                  }`}
+                >
+                  {item.price_change_percentage_24h}%
+                </h1>
+
+                <button onClick={() => handleDeleteModal(item)} className="bg-red-600 mt-1 px-2">remove</button>
+              </div>
+
+            ))}
+            <button
+              onClick={handleCloseModal}
+              className="w-full mt-3 h-[30px] bg-red-600 text-white"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      //  
+      )}
     </div>
   );
 };
