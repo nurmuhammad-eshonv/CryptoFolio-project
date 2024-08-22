@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { MdRemoveRedEye } from "react-icons/md";
-
+import { Navigate, useNavigate } from "react-router-dom";
 const MarketCup = () => {
   const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
@@ -52,10 +52,15 @@ const MarketCup = () => {
 
   const handleDeleteModal = (item) => {
     const newDeletedData = modalData.filter((data) => data.id !== item.id);
-    setModalData(newDeletedData);
+    setModalData(newDeletedData); 
   };
+  const navigate = useNavigate()
+  function handleNavigate(item) {
+    navigate(`/details/${item.id}`);
+  }
 
   return (
+    <>
     <div className="bg-transparent p-4 rounded-lg containerr">
       <h1 className="text-2xl text-center text-white mb-4">
         Cryptocurrency Prices by Market Cap
@@ -88,7 +93,8 @@ const MarketCup = () => {
                 <tr key={index} className="text-white border-b border-gray-800">
                   <td className="p-2 flex items-center">
                     <img
-                      className="w-[50px] h-[50px]"
+                    onClick={() => handleNavigate(item)}
+                      className="w-[50px] h-[50px] cursor-pointer"
                       src={item.image}
                       alt={item.name}
                     />
@@ -145,7 +151,7 @@ const MarketCup = () => {
                 key={index}
                 className="w-[198px] h-[230px] flex flex-col items-center rounded-[25px] justify-center bg-black mb-4"
               >
-                <img className="w-[118px]" src={item.image} alt="" />
+                <img  className="w-[118px]" src={item.image} alt="" />
                 <h1
                   className={`pt-3 ${
                     item.price_change_percentage_24h > 0
@@ -174,7 +180,10 @@ const MarketCup = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 
 export default MarketCup;
+
+
